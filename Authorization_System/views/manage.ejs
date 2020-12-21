@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="css/main.css" rel="stylesheet" media="all">
+    <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+<body>
+    <div class="page-wrapper bg-gra-02 font-poppins">
+        <div class="jumbotron bg-gra-01">
+            <div class="text-center">
+                <h1 class="display-4">Management Page</h1>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin-bottom: 16px;">
+            <a class="btn btn-primary btn-lg" role="button" style="margin-top: 8px;" id="btn_total">사용자 전체보기</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button" style="margin-top: 8px;" id="btn_delete">사용자 삭제</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button" style="margin-top: 8px;" id="btn_alter">사용자 권한
+                변경</a>
+        </div>
+
+        <div id="view_total" style="display: none;">
+            <div class="wrapper wrapper--w780">
+                <div class="card-5">
+                    <div class="card-body">
+                        <h2 class="title">Total User</h2>
+                        <div>
+                            <table class="table table-striped" id="tableData">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Phone_number</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view_delete" style="display: none;">
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+                        <h2 class="title">User Delete</h2>
+                        <div>
+                            <form class="form-group">
+                                <input type="text" id="input_delete_id" class="form-control" placeholder="User ID"
+                                    required autofocus>
+                                <button class="btn btn-lg btn-success btn-block" type="submit" required
+                                    style="margin-top: 5%;" id="act_delete">DELETE</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view_alter" style="display: none;">
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+                        <h2 class="title">Alter User</h2>
+                        <div>
+                            <form class="form-group" id="form">
+                                <input type="text" id="input_alter_id" class="form-control" placeholder="User ID"
+                                    required autofocus>
+
+                                <label for="sel" style="margin-top: 8px;">Select list</label>
+                                <select class="form-control" id="sel_grade">
+                                    <option>admin</option>
+                                    <option>user</option>
+                                </select>
+                                <button class="btn btn-lg btn-success btn-block" type="submit" required
+                                    style="margin-top: 12px;" id="act_alter">ALTER</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $('#btn_total').click(function () {
+                $('#view_delete').css('display', 'none')
+                $('#view_alter').css('display', 'none')
+                $('#view_total').css('display', 'inline')
+                $.ajax({
+                    url: '/manage/total',
+                    async: true,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#tableData .tbody').html('<tr></tr>')
+                            for (let i = 0; i < data.length; i++) {
+                                var newRow = $('<tr>');
+                                var cols = '';
+                                cols += '<td> ' + data[i].user_id + '</td>';
+                                cols += '<td> ' + data[i].name + '</td>';
+                                cols += '<td> ' + data[i].gender + '</td>';
+                                cols += '<td> ' + data[i].phone_number + '</td>';
+                                cols += '<td> ' + data[i].grade + '</td>';
+                                newRow.append(cols);
+                                $('#tableData .tbody').append(newRow);
+                            }
+                        }
+                    },
+                    error: function (req, status, err) {
+                        alert("code:"+req.status+"\n"+"message:"+req.responseText+"\n"+"error:"+err);
+                    }
+                })
+            })
+
+            $('#btn_delete').click(function () {
+                $('#view_total').css('display', 'none')
+                $('#view_alter').css('display', 'none')
+                $('#view_delete').css('display', 'inline')
+
+            })
+
+            $('#btn_alter').click(function () {
+                $('#view_total').css('display', 'none')
+                $('#view_delete').css('display', 'none')
+                $('#view_alter').css('display', 'inline')
+            })
+
+            $('#act_delete').click(function () {
+                var input_id = $('#input_delete_id')
+                $.ajax({
+                    url: '/manage/delete',
+                    async: true,
+                    type: 'GET',
+                    dataType: 'text',
+                    data:{
+                        user_id : input_id.val()
+                    },
+                    success: function (data) {
+                        alert(data)
+                    },
+                    error: function (req, status, err) {
+                        alert("code:"+req.status+"\n"+"message:"+req.responseText+"\n"+"error:"+err);
+                    }
+                })
+                input_id.val('')
+            })
+
+            $('#act_alter').click(function () {
+                var input_id = $('#input_alter_id')
+                var input_grade = $('#sel_grade')
+                $.ajax({
+                    url:'/manage/alter',
+                    async:true,
+                    type:'GET',
+                    dataType:'text',
+                    data:{
+                        user_id : input_id.val(),
+                        user_grade : input_grade.val()
+                    },
+                    success:function(res){
+                        alert(res)
+                    },
+                    error:function(req,status,err){
+                        alert("code:"+req.status+"\n"+"message:"+req.responseText+"\n"+"error:"+err);
+                    }
+                })
+            })
+        </script>
+</body>
+</html>

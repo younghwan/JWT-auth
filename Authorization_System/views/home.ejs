@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="css/main.css" rel="stylesheet" media="all">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper bg-gra-02 font-poppins">
+            <div class="jumbotron bg-gra-01">
+                <div class="text-center">
+                <h1 class="display-4">Welcome</h1>
+                <p><a class="btn btn-primary btn-lg" href="#" role="button" style="margin-top: 8px;" id="manage">관리자 페이지</a></p>
+                <script>
+                    $('#manage').click(function(){
+                        $.ajax({
+                            url:'/home/check',
+                            type:'GET',
+                            dataType:'json',
+                            success:function(data){
+                                if(data['code'] == 200){
+                                    location.href = 'manage'    
+                                }
+                                alert(data['message'])
+                            },
+                            error:function(req,status,err){
+                                alert("error : "+err)
+                            }
+                        })
+                    })
+                </script>
+            </div>
+    </div>
+</body>
+</html>

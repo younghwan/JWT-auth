@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <link href="css/main.css" rel="stylesheet" media="all">
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper bg-gra-01 p-t-130 p-b-100 font-poppins">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+                    <h2 class="title">LOGIN</h2>
+                    <div>
+                        <form class="form-signin">
+                            <!-- <label for="inputId" class="sr-only">User ID</label> -->
+                            <input type="text" id="inputId" class="form-control" placeholder="User ID" required
+                                autofocus>
+                            <!-- <label for="inputPassword" class="sr-only">Password</label> -->
+                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required style="margin-top: 8px;">
+                        </form>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit" id ="signin">Sign in</button>
+                        <button class="btn btn-lg btn-success btn-block" type="submit" id="signup">Sign up</button>
+                        <script>
+                            $("#signup").click(function(){
+                              location.href = 'signup'  
+                            })
+                            $("#signin").click(function(){
+                                var data = {
+                                    "user_id" : $("#inputId").val(),
+                                    "password" : $("#inputPassword").val()
+                                } 
+                                $.ajax({
+                                    url:'/login',
+                                    async:true,
+                                    type:'POST',
+                                    data:{
+                                        account : data
+                                    },
+                                    dataType:'json',
+                                    success:function(data){
+                                        if(data['code'] == 200){
+                                            alert(data['message'])
+                                            location.href = 'home'
+                                        }else{
+                                            alert(data['message'])
+                                        }
+                                    },
+                                    error:function(req,status,err){
+                                        console.log(err)
+                                    }
+                                })
+                            })
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

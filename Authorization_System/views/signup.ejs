@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <title>Sign Up</title>
+
+    <link href="css/main.css" rel="stylesheet" media="all">
+    <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper bg-gra-01 p-t-130 p-b-100 font-poppins" >
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+                    <h2 class="title">Registration</h2>
+                    <form method="POST">
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">ID</label>
+                                    <input class="input--style-4" type="text" name="id" id="id">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Name</label>
+                                    <input class="input--style-4" type="text" name="name" id="name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Password</label>
+                                    <input class="input--style-4" type="Password" id="pw">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Gender</label>
+                                    <div class="p-t-10">
+                                        <label class="radio-container m-r-45">Male
+                                            <input type="radio" checked="checked" name="radio_gender" value="Male">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="radio-container">Female
+                                            <input type="radio" name="radio_gender" value="Female">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group-icon">
+                                    <label class="label">Confirm</label>
+                                    <input class="input--style-4" type="Password" id="confirm">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Phone Number</label>
+                                    <input class="input--style-4" type="text" name="phone" id="pnum">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-t-15">
+                            <button class="btn btn--radius-2 btn--blue" type="submit" id="submit">Submit</button>
+                        </div>
+                    </form>
+                    <script>
+                        $('#submit').click(function(){
+                            
+                            // if($('$input_info').val()!=$('#pw').val()){
+                            //     return alert("패스워드가 일치하지 않습니다.")
+                            // }
+
+                            var input_info = {
+                                "user_id" : $('#id').val(),
+                                "name" : $('#name').val(),
+                                "password" : $('#pw').val(),
+                                "confirm" : $('#confirm').val(),
+                                "gender" : $("input[name=radio_gender]:checked").val(),
+                                "phone_number" : $('#pnum').val(),
+                                "grade" : "user"
+                            }
+                            $.ajax({
+                                url:'/signup/register',
+                                async:true,
+                                type:'POST',
+                                data : {
+                                    user_info : input_info
+                                },
+                                dataType:'json',
+                                success:function(data){
+                                    console.log(data)
+                                    if(data['code'] == 200){
+                                            alert(data['message'])
+                                            location.href = '/'
+                                        }else{
+                                            alert(data['message'])
+                                            location.href = '/signup'
+                                        }
+                                },
+                                error:function(request,status,error){
+                                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                                }
+                            })
+                        })
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
